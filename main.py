@@ -1,9 +1,16 @@
+import logging
+import os
+import tempfile
 from contextlib import asynccontextmanager
 
+import boto3
 import torch
 import torch.nn as nn
+from botocore.exceptions import ClientError
 from fastapi import FastAPI
 from pydantic import BaseModel
+
+log = logging.getLogger(__name__)
 
 INPUT_DIM = 16
 HIDDEN_DIM = 64
@@ -31,6 +38,25 @@ async def lifespan(app: FastAPI):
     global device, model
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = _MLP().to(device)
+
+    bucket = os.getenv("MODEL_BUCKET")
+    if bucket:
+        try:
+            s3 = boto3.client("s3")
+            with tempfile.TemporaryDirectory() as tmp:
+                local_path = f"{tmp}/model.pth"
+                s3.download_file(bucket, "models/production/model.pth", local_path)
+                state_dict = torch.load(local_path, map_location=device, weights_only=True)
+                model.load_state_dict(state_dict)
+                log.info("Loaded production model from S3")
+        except ClientError as e:
+            if e.response["Error"]["Code"] in ("404", "NoSuchKey"):
+                log.warning("No production model in S3, using random weights")
+            else:
+                raise
+    else:
+        log.warning("MODEL_BUCKET not set, using random weights")
+
     model.eval()
     yield
 

@@ -20,3 +20,7 @@ terraform.tfstate.backup
 
 # Ansible
 inventory.ini
+
+# MLflow
+mlruns/
+mlflow.db

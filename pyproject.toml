@@ -5,14 +5,19 @@ description = "ML model serving with FastAPI and Torch"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "boto3>=1.43.2",
     "fastapi>=0.115.0",
     "numpy>=2.0.0",
     "uvicorn[standard]>=0.34.0",
 ]
 
+[project.scripts]
+train = "train:main"
+promote = "promote:main"
+
 [project.optional-dependencies]
 inference = ["torch"]
-training = ["torch"]
+training = ["torch", "mlflow"]
 
 [tool.uv]
 conflicts = [
