@@ -1,0 +1,22 @@
+---
+- name: Deploy ml-model-serving
+  hosts: app_servers
+  become: true
+
+  tasks:
+    - name: Pull latest Docker image
+      community.docker.docker_image:
+        name: ghcr.io/fcoelhomrc/ml-model-serving
+        tag: latest
+        source: pull
+        force_source: true
+
+    - name: Recreate container with new image
+      community.docker.docker_container:
+        name: ml-model-serving
+        image: ghcr.io/fcoelhomrc/ml-model-serving:latest
+        state: started
+        recreate: true
+        restart_policy: unless-stopped
+        ports:
+          - "8080:8080"

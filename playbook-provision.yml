@@ -21,11 +21,6 @@
         name: docker
         state: present
 
-    - name: Install Docker Compose plugin
-      ansible.builtin.dnf:
-        name: docker-compose-plugin
-        state: present
-
     - name: Start and enable Docker
       ansible.builtin.service:
         name: docker
@@ -38,14 +33,3 @@
         groups: docker
         append: true
 
-    - name: Clone repository
-      ansible.builtin.git:
-        repo: https://github.com/fcoelhomrc/ml-model-serving.git
-        dest: /opt/app
-        version: main
-        force: true
-
-    - name: Run docker compose up
-      ansible.builtin.command:
-        cmd: docker compose up -d
-        chdir: /opt/app

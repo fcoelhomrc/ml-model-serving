@@ -48,7 +48,7 @@
           packages = [
             pkgs.uv
             pkgs.terraform
-            pkgs.ansible
+            (pkgs.ansible.override { extraPackages = ps: [ ps.boto3 ]; })
             pkgs.awscli2
           ];
         };
