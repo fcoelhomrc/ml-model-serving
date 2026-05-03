@@ -17,3 +17,6 @@ wheels/
 .terraform/
 terraform.tfstate
 terraform.tfstate.backup
+
+# Ansible
+inventory.ini
