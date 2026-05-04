@@ -5,8 +5,8 @@ Learning project. Goal is to get familiar with the tools around deploying ML mod
 The actual model is a MobileNetV2 fine-tuned to classify bean leaf images (healthy / angular leaf spot / bean rust). It's a simple enough task that I can focus on the infra side.
 
 <div align="center">
-  <img src="example.png" height="300">
-  <img src="demo.gif" height="300">
+  <img src="example.png" height="150">
+  <img src="demo.gif" height="150">
 </div>
 
 ## How it fits together
