@@ -6,6 +6,8 @@ The actual model is a MobileNetV2 fine-tuned to classify bean leaf images (healt
 
 ![](example.png)
 
+![](demo.gif)
+
 ## How it fits together
 
 ```
