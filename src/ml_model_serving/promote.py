@@ -6,7 +6,7 @@ import tempfile
 import boto3
 import mlflow
 
-import logger
+from ml_model_serving import logger
 
 log = logging.getLogger(__name__)
 

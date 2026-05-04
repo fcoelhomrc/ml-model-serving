@@ -1,3 +1,10 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ml_model_serving"]
+
 [project]
 name = "ml-model-serving"
 version = "0.1.0"
@@ -5,21 +12,26 @@ description = "ML model serving with FastAPI and Torch"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "ansible>=13.6.0",
+    "awscli>=1.45.2",
     "boto3>=1.43.2",
     "fastapi>=0.115.0",
     "numpy>=2.0.0",
+    "pillow>=10.0.0",
+    "python-multipart>=0.0.27",
     "uvicorn[standard]>=0.34.0",
 ]
 
 [project.scripts]
-train = "train:main"
-promote = "promote:main"
+train = "ml_model_serving.train:main"
+promote = "ml_model_serving.promote:main"
 
 [project.optional-dependencies]
-inference = ["torch"]
-training = ["torch", "mlflow"]
+inference = ["torch", "torchvision"]
+training = ["torch", "torchvision", "mlflow", "datasets>=3.0.0", "scikit-learn>=1.5.0", "certifi"]
 
 [tool.uv]
+package = true
 conflicts = [
     [
       { extra = "training" },
@@ -29,6 +41,10 @@ conflicts = [
 
 [tool.uv.sources]
 torch = [
+  { index = "torch-cpu", extra = "inference" },
+  { index = "torch-cu128", extra = "training" },
+]
+torchvision = [
   { index = "torch-cpu", extra = "inference" },
   { index = "torch-cu128", extra = "training" },
 ]
