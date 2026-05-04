@@ -8,7 +8,6 @@ on:
 
 jobs:
   build-and-push:
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
     permissions:
@@ -47,7 +46,7 @@ jobs:
       - name: Write SSH key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/ml-model-serving
+          printf '%s\n' "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/ml-model-serving
           chmod 600 ~/.ssh/ml-model-serving
 
       - name: Run deploy playbook
