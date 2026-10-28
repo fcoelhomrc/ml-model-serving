@@ -1,0 +1,41 @@
+# Render: d2 --sketch --pad 40 docs/architecture.d2 docs/architecture.svg
+# Icons: AWS architecture icons via icons.terrastruct.com
+grid-rows: 3
+grid-columns: 4
+vertical-gap: 70
+horizontal-gap: 70
+
+classes: {
+  box: {style: {stroke-width: 2; border-radius: 6; font-size: 22; fill: white}}
+  icon: {shape: image; width: 96; height: 96; label.near: outside-bottom-center; style.font-size: 22}
+  tool: {style: {fill: "#f3f3f5"; stroke-width: 2; border-radius: 6; font-size: 22}}
+  blank: {label: ""; style: {opacity: 0}}
+}
+
+train: Train locally\nPyTorch · GPU {class: box}
+mlflow: MLflow\nrun + model.pth {class: box}
+s3: S3 model bucket {class: icon; icon: https://icons.terrastruct.com/aws%2FStorage%2FAmazon-Simple-Storage-Service-S3_Bucket_light-bg.svg}
+terraform: Terraform\nprovisions AWS {class: tool}
+
+actions: GitHub Actions {class: icon; icon: https://icons.terrastruct.com/dev%2Fgithub.svg}
+ansible: Ansible\nSSH deploy {class: tool}
+ec2: EC2 · FastAPI container {class: icon; icon: https://icons.terrastruct.com/aws%2FCompute%2FAmazon-EC2.svg}
+iam: IAM role · S3 read {class: icon; icon: https://icons.terrastruct.com/aws%2FSecurity%2C%20Identity%2C%20%26%20Compliance%2FAWS-Identity-and-Access-Management-IAM_Role_light-bg.svg}
+
+tag: git tag v0.x {class: icon; icon: https://icons.terrastruct.com/dev%2Fgit.svg}
+ghcr: Docker image · GHCR {class: icon; icon: https://icons.terrastruct.com/dev%2Fdocker.svg}
+client: POST /predict {class: icon; icon: https://icons.terrastruct.com/tech%2Flaptop.svg}
+b1 {class: blank}
+
+train -> mlflow
+mlflow -> s3: promote
+s3 -> ec2: weights at boot
+terraform -> s3
+terraform -> iam
+iam -> ec2
+tag -> actions
+actions -> ghcr: build
+actions -> ansible
+ansible -> ec2
+ghcr -> ec2: pull
+client -> ec2

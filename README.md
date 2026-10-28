@@ -11,6 +11,11 @@ The actual model is a MobileNetV2 fine-tuned to classify bean leaf images (healt
 
 ## How it fits together
 
+![Architecture](docs/architecture.svg)
+
+The diagram is generated from [`docs/architecture.d2`](docs/architecture.d2)
+with [D2](https://d2lang.com), using the AWS architecture icons.
+
 ```
 train locally (GPU)
     → MLflow tracks the run + saves model.pth
